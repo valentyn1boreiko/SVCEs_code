@@ -169,6 +169,7 @@ class AFWAttack(AdversarialAttack):
             y = y.unsqueeze(0)
 
         device = x.device
+        self.model.module.T.to(device)
 
         #init
         w_randn = torch.randn(x.shape).to(device).detach()
@@ -193,6 +194,7 @@ class AFWAttack(AdversarialAttack):
         grad = torch.zeros_like(x)
         for _ in range(self.eot_iter):
             with torch.enable_grad():
+
                 logits = self.model(x_adv)
                 loss_indiv = criterion_indiv(x_adv, logits)
                 loss = loss_indiv.sum()
@@ -247,10 +249,10 @@ class AFWAttack(AdversarialAttack):
                 print('loss best', loss_best)
             if grad.view(x_adv.shape[0], -1).norm(p=2, dim=1).min() <= 1e-7:
             #    self.model.module.T*=2
-                self.model.T = torch.where(grad.view(x_adv.shape[0], -1).norm(p=2, dim=1).unsqueeze(1) <= 1e-7,
-                                       self.model.T * 2, self.model.T)
+                self.model.module.T = torch.where(grad.view(x_adv.shape[0], -1).norm(p=2, dim=1).unsqueeze(1) <= 1e-7,
+                                       self.model.module.T * 2, self.model.module.T)
 
-                print('doubling temp', self.model.T)
+                print('doubling temp', self.model.module.T)
             grad /= float(self.eot_iter)
 
             pred = logits.detach().max(1)[1] == y

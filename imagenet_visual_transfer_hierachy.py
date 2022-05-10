@@ -32,7 +32,7 @@ else:
     device_ids = [int(i) for i in hps.gpu]
     device = torch.device('cuda:' + str(min(device_ids)))
     num_devices = len(device_ids)
-
+hps.num_devices = num_devices
 ds_path = get_imagenet_path()
 ds_info_path = '/mnt/SHARED/datasets/imagenet'
 
@@ -42,7 +42,7 @@ max_descendants = 10
 img_size = 224
 imgs_per_class = hps.samples
 
-#selected_wnids = ['geological formation, formation', 'foodstuff, food product', 'finch', 'edible fruit', 'dish', 'cruciferous vegetable', 'colubrid snake, colubrid', 'beetle', 'amphibian']
+selected_wnids = ['geological formation, formation', 'foodstuff, food product', 'finch', 'edible fruit', 'dish', 'cruciferous vegetable', 'colubrid snake, colubrid', 'beetle', 'amphibian']
 #selected_wnids += ['headdress, headgear']
 #selected_wnids += ['boat', 'bony fish', 'memorial, monument']
 #selected_wnids = ['boat', 'dish']

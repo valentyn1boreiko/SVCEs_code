@@ -295,11 +295,10 @@ def _inner_generation(original_imgs, perturbation_targets, all_model_original_pr
                                                                 batch_targets_i[valid_batch_targets], best_loss=True)[0].detach()
                                                                     #targeted=True).detach()
                             else:
-                                att.model.T = torch.tile(torch.tensor([att.model.T], device=device),
-                                                         (batch_data.shape[0], 1))
+                                att.model.module.T = torch.tensor([att.model.module.T], device=device).repeat((int(batch_data.shape[0] / len(device_ids)), 1))
                                 batch_valid_adv_samples_i = att.perturb(batch_data[valid_batch_targets],
                                                                 batch_targets_i[valid_batch_targets], targeted=True).detach()
-                                att.model.T = 0.7155761122703552
+                                att.model.module.T = 0.7155761122703552
                             batch_adv_samples_i[valid_batch_targets] = batch_valid_adv_samples_i
                             #model.module.T = 0.7155761122703552
                             #att.model.module.T = 0.7155761122703552
