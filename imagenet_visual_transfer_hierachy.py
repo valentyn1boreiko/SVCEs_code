@@ -20,6 +20,7 @@ parser.add_argument('--samples', type=int, default=5)
 
 hps = parser.parse_args()
 
+
 if len(hps.gpu)==0:
     device = torch.device('cpu')
     print('Warning! Computing on CPU')
@@ -139,6 +140,7 @@ if norm.lower() == 'l1':
                                           norm='L1', steps=75, attack_type='apgd', filenames=filenames, device_ids=device_ids)
 elif norm.lower() == 'l1.5':
     radii = [50, 75, 100]
+    print('num images', len(imgs), len(targets_lists), bs)
     targeted_translations(model_descriptions, radii, imgs, targets_lists, bs, in_labels, device, dir, dataset,
                           norm='l1.5', steps=75, attack_type='afw', filenames=filenames, device_ids=device_ids)
 elif norm.lower() == 'l2':

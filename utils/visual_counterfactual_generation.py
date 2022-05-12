@@ -295,15 +295,21 @@ def _inner_generation(original_imgs, perturbation_targets, all_model_original_pr
                                                                 batch_targets_i[valid_batch_targets], best_loss=True)[0].detach()
                                                                     #targeted=True).detach()
                             else:
+                                #print('batch size', len(batch_data[valid_batch_targets]), len(batch_targets_i[valid_batch_targets]))
                                 if len(device_ids) > 1:
                                     att.device_ids = device_ids
-                                    att.model.module.T = torch.tensor([att.model.module.T], device=device).repeat((batch_data.shape[0], 1))
+                                    att.model.module.T = torch.tensor([att.model.module.T], device=device).repeat((batch_data[valid_batch_targets].shape[0], 1))
                                 else:
                                     att.device_ids = device_ids
-                                    att.model.T = torch.tensor([att.model.T], device=device).repeat((batch_data.shape[0], 1))
+                                    att.model.T = torch.tensor([att.model.T], device=device).repeat((batch_data[valid_batch_targets].shape[0], 1))
                                 batch_valid_adv_samples_i = att.perturb(batch_data[valid_batch_targets],
                                                                 batch_targets_i[valid_batch_targets], targeted=True).detach()
-                                att.model.module.T = 0.7155761122703552
+
+                                print('setting temperature back to', temperature)
+                                if len(device_ids) > 1:
+                                    att.model.module.T = temperature
+                                else:
+                                    att.model.T = temperature
                             batch_adv_samples_i[valid_batch_targets] = batch_valid_adv_samples_i
                             #model.module.T = 0.7155761122703552
                             #att.model.module.T = 0.7155761122703552
