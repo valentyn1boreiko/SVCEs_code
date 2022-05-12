@@ -16,6 +16,10 @@ class TemperatureWrapper(nn.Module):
 
     def forward(self, x):
         logits = self.model(x)
+        #try:
+        #    self.T = self.T.to(logits.device)
+        #except Exception as err:
+        #    print(str(err))
         return logits / self.T
 
     @staticmethod
