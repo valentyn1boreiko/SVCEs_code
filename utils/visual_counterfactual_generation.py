@@ -13,6 +13,8 @@ from tqdm import trange
 from time import sleep
 from .train_types.helpers import create_attack_config, get_adversarial_attack
 from PIL import Image
+from utils.temperature_wrapper import TemperatureWrapper
+
 
 def _prepare_targeted_translations(model_descriptions, imgs, target_list,
                                    class_labels, device, dataset, bs, device_ids=None):
@@ -27,6 +29,7 @@ def _prepare_targeted_translations(model_descriptions, imgs, target_list,
         # search failure cases
         if device_ids is not None and len(device_ids) > 1:
             model = nn.DataParallel(model, device_ids=device_ids)
+        model = TemperatureWrapper(model, temperature)
         model.eval()
 
         with torch.no_grad():
@@ -79,6 +82,7 @@ def _find_wrong_examples(model_descriptions, dataloader, num_examples, class_lab
             # search failure cases
             if device_ids is not None and len(device_ids) > 1:
                 model = nn.DataParallel(model, device_ids=device_ids)
+            model = TemperatureWrapper(model, temperature)
             model.eval()
 
             datapoint_idx = 0
@@ -248,6 +252,7 @@ def _inner_generation(original_imgs, perturbation_targets, all_model_original_pr
             model = load_model(type, model_folder, model_checkpoint, temperature, device, load_temp=temp, dataset=dataset)
             if device_ids is not None and len(device_ids) > 1:
                 model = nn.DataParallel(model, device_ids=device_ids)
+            model = TemperatureWrapper(model, temperature)
             model.eval()
 
             out_imgs = torch.zeros((num_imgs, num_targets, num_radii) + img_dimensions)
@@ -296,20 +301,17 @@ def _inner_generation(original_imgs, perturbation_targets, all_model_original_pr
                                                                     #targeted=True).detach()
                             else:
                                 #print('batch size', len(batch_data[valid_batch_targets]), len(batch_targets_i[valid_batch_targets]))
-                                if len(device_ids) > 1:
-                                    att.device_ids = device_ids
-                                    att.model.module.T = torch.tensor([att.model.module.T], device=device).repeat((batch_data[valid_batch_targets].shape[0], 1))
-                                else:
-                                    att.device_ids = device_ids
-                                    att.model.T = torch.tensor([att.model.T], device=device).repeat((batch_data[valid_batch_targets].shape[0], 1))
+                                #if len(device_ids) > 1:
+                                #    att.device_ids = device_ids
+                                #    att.model.module.T = torch.tensor([att.model.module.T], device=device).repeat((batch_data[valid_batch_targets].shape[0], 1))
+                                #else:
+                                #    att.device_ids = device_ids
+                                att.model.T = torch.tensor([att.model.T], device=device).repeat((batch_data[valid_batch_targets].shape[0], 1))
                                 batch_valid_adv_samples_i = att.perturb(batch_data[valid_batch_targets],
                                                                 batch_targets_i[valid_batch_targets], targeted=True).detach()
 
                                 print('setting temperature back to', temperature)
-                                if len(device_ids) > 1:
-                                    att.model.module.T = temperature
-                                else:
-                                    att.model.T = temperature
+                                att.model.T = temperature
                             batch_adv_samples_i[valid_batch_targets] = batch_valid_adv_samples_i
                             #model.module.T = 0.7155761122703552
                             #att.model.module.T = 0.7155761122703552

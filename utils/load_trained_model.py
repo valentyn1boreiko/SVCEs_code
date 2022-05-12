@@ -11,7 +11,7 @@ from torchvision import models as torch_models
 
 from utils.model_normalization import Cifar10Wrapper, Cifar100Wrapper, SVHNWrapper,\
     ImageNetWrapper, RestrictedImageNetWrapper, BigTransferWrapper
-from utils.temperature_wrapper import TemperatureWrapper
+#from utils.temperature_wrapper import TemperatureWrapper
 import utils.models.ebm_wrn as wrn
 from utils.models.big_transfer_factory import build_model_big_transfer
 from utils.datasets.paths import get_CIFAR10_path, get_imagenet_path
@@ -187,8 +187,8 @@ def load_model(type, folder, checkpoint, temperature, device, dataset='cifar10',
 
     if type in non_native_model:
         model = load_non_native_model(type, folder, device)
-        if temperature is not None:
-            model = TemperatureWrapper(model, temperature)
+        #if temperature is not None:
+        #    model = TemperatureWrapper(model, temperature)
         return model
 
     if 'BiT' in type:
@@ -233,8 +233,8 @@ def load_model(type, folder, checkpoint, temperature, device, dataset='cifar10',
 
     model.to(device)
 
-    if temperature is not None:
-        model = TemperatureWrapper(model, temperature)
+    #if temperature is not None:
+    #    model = TemperatureWrapper(model, temperature)
 
     model.eval()
     return model

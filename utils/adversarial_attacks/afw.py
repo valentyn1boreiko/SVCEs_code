@@ -118,7 +118,6 @@ class AFWAttack(AdversarialAttack):
         AutoPGD implementation in PyTorch
         """
         super().__init__(loss, num_classes, model=model, save_trajectory=False)
-        self.device_ids = None
         self.n_iter = n_iter
         self.eps = eps
         self.n_restarts = n_restarts
@@ -250,17 +249,16 @@ class AFWAttack(AdversarialAttack):
             if grad.view(x_adv.shape[0], -1).norm(p=2, dim=1).min() <= 1e-7:
             #    self.model.module.T*=2
                 #print('shapes', self.model.module.T.shape, grad.shape, x_adv.shape)
-                assert self.device_ids is not None
 
-                if len(self.device_ids) > 1:
-                    self.model.module.T = torch.where(grad.view(x_adv.shape[0], -1).norm(p=2, dim=1).unsqueeze(1) <= 1e-7,
-                                       self.model.module.T * 2, self.model.module.T)
-                    print('doubling temp', self.model.module.T)
-                else:
-                    self.model.T = torch.where(grad.view(x_adv.shape[0], -1).norm(p=2, dim=1).unsqueeze(1) <= 1e-7,
+                #if len(self.device_ids) > 1:
+                #    self.model.module.T = torch.where(grad.view(x_adv.shape[0], -1).norm(p=2, dim=1).unsqueeze(1) <= 1e-7,
+                #                       self.model.module.T * 2, self.model.module.T)
+                #    print('doubling temp', self.model.module.T)
+                #else:
+                self.model.T = torch.where(grad.view(x_adv.shape[0], -1).norm(p=2, dim=1).unsqueeze(1) <= 1e-7,
                                                   self.model.T * 2, self.model.T)
 
-                    print('doubling temp', self.model.T)
+                print('doubling temp', self.model.T)
             grad /= float(self.eot_iter)
 
             pred = logits.detach().max(1)[1] == y

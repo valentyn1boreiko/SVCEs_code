@@ -65,7 +65,7 @@ model_descriptions = [
 
 in_hier = ImageNetHierarchy(ds_path, ds_info_path)
 in_labels = get_imagenet_labels()
-in_loader = dl.get_ImageNet(train=False, augm_type='none',size=img_size)
+in_loader = dl.get_ImageNet(train=False, augm_type='none', size=img_size)
 in_dataset = in_loader.dataset
 
 torch.manual_seed(0)
