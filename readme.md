@@ -4,9 +4,6 @@ Welcome to the codebase for our paper *Sparse Visual Counterfactual Explanations
 ## Examples of l1.5 VCEs for ImageNet
 
 <p align="center">
-  <img src="images_examples/edible fruit_fig_0_47603.png" />
-</p>
-<p align="center">
   <img src="images_examples/edible fruit_orange_0_47545.png" />
 </p>
 <p align="center">
