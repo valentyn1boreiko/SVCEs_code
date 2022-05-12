@@ -1,4 +1,4 @@
-name: eccv_vce
+name: vces
 channels:
   - pytorch
   - anaconda

@@ -1,6 +1,6 @@
 # **Sparse Visual Counterfactual Explanations in Image Space**
 
-Welcome to the codebase for our ECCV submission *Sparse Visual Counterfactual Explanations in Image Space.* We will guide you through the process of generating your own l1.5 visual counterfactual explanations on ImageNet with the multiple norm robust model Madry + FT. 
+Welcome to the codebase for our paper *Sparse Visual Counterfactual Explanations in Image Space.* We will guide you through the process of generating your own l1.5 visual counterfactual explanations on ImageNet with the multiple norm robust model Madry + FT. 
 ## Setup
 
 Before we can start with the generation, we have to setup the project and install required packages.
@@ -16,7 +16,7 @@ Before we can start with the generation, we have to setup the project and instal
 	      return path
 
 * Create a new conda env via `conda env create -f reqs.yml`
-* Activate the conda environment via `conda activate eccv_vce
+* Activate the conda environment via `conda activate vces
 `
 
 

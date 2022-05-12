@@ -43,7 +43,7 @@ max_descendants = 10
 img_size = 224
 imgs_per_class = hps.samples
 
-selected_wnids = ['geological formation, formation', 'foodstuff, food product', 'finch', 'edible fruit', 'dish', 'cruciferous vegetable', 'colubrid snake, colubrid', 'beetle', 'amphibian']
+selected_wnids = ['geological formation, formation', 'foodstuff, food product', 'finch', 'edible fruit', 'memorial, monument'] #, 'dish', 'cruciferous vegetable', 'colubrid snake, colubrid', 'beetle', 'amphibian']
 #selected_wnids += ['headdress, headgear']
 #selected_wnids += ['boat', 'bony fish', 'memorial, monument']
 #selected_wnids = ['boat', 'dish']
