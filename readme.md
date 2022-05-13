@@ -12,6 +12,7 @@ Welcome to the codebase for our paper *Sparse Visual Counterfactual Explanations
 <p align="center">
   <img src="images_examples/geological formation formation_alp_0_48544.png" />
 </p>
+
 ## Setup
 
 Before we can start with the generation, we have to setup the project and install required packages.
