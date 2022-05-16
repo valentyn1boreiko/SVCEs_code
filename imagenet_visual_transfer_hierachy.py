@@ -43,7 +43,7 @@ max_descendants = 10
 img_size = 224
 imgs_per_class = hps.samples
 
-selected_wnids = ['geological formation, formation', 'foodstuff, food product', 'finch', 'edible fruit', 'memorial, monument'] #, 'dish', 'cruciferous vegetable', 'colubrid snake, colubrid', 'beetle', 'amphibian']
+#selected_wnids = ['geological formation, formation', 'foodstuff, food product', 'finch', 'edible fruit', 'memorial, monument'] #, 'dish', 'cruciferous vegetable', 'colubrid snake, colubrid', 'beetle', 'amphibian']
 #selected_wnids += ['headdress, headgear']
 #selected_wnids += ['boat', 'bony fish', 'memorial, monument']
 #selected_wnids = ['boat', 'dish']
@@ -132,6 +132,7 @@ if selected_wnids is not None:
     for wnid in selected_wnids:
         if not wnid_found[wnid]:
             print(f'Not found: {wnid}')
+
 
 norm = 'L1.5'
 if norm.lower() == 'l1':

@@ -111,6 +111,10 @@ def confidence_loss(out, y, reduction='mean'):
     confidences_y = confidences[torch.arange(0, confidences.shape[0]), y]
     return reduce(confidences_y, reduction)
 
+def log_confidence_loss(out, y, reduction='mean'):
+    log_confidences = F.log_softmax(out, dim=1)
+    confidences_y = log_confidences[torch.arange(0, log_confidences.shape[0]), y]
+    return reduce(confidences_y, reduction)
 ###################################
 def create_early_stopping_mask(out, y, conf_threshold, targeted):
     finished = False

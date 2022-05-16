@@ -227,7 +227,7 @@ def _plot_counterfactuals(dir, model_name, model_checkpoint, original_imgs, orig
 
 def _inner_generation(original_imgs, perturbation_targets, all_model_original_probabilities, model_descriptions, radii,
                       bs, class_labels, device, eval_dir, dataset, norm, steps, stepsize, attack_type, filenames=None,
-                      plot_single_images=False, show_distanes=False, device_ids=None, verbose=False):
+                      plot_single_images=False, show_distanes=False, device_ids=None, verbose=True):
     num_classes = len(class_labels)
     img_dimensions = original_imgs.shape[1:]
     num_targets = perturbation_targets.shape[2]
@@ -272,10 +272,10 @@ def _inner_generation(original_imgs, perturbation_targets, all_model_original_pr
                     eps = radii[radius_idx]
 
                     if temperature is not None and temperature < 0.2:
-                        loss = 'ce-targeted-cfts-conf' if norm.lower() in ['l1', 'l2'] else 'conf' #'conf' #'logitsdiff'#'logit_max_target'
+                        loss = 'ce-targeted-cfts-conf' if norm.lower() in ['l1', 'l2'] else 'log_conf' #'conf' #'logitsdiff'#'logit_max_target'
                         raise NotImplementedError()
                     else:
-                        loss = 'ce-targeted-cfts-conf' if norm.lower() in ['l1', 'l2'] else 'conf' #'conf' #'logitsdiff'#'conf'
+                        loss = 'ce-targeted-cfts-conf' if norm.lower() in ['l1', 'l2'] else 'log_conf' #'conf' #'logitsdiff'#'conf'
                     if verbose:
                         print('using loss', loss)
 
@@ -298,23 +298,12 @@ def _inner_generation(original_imgs, perturbation_targets, all_model_original_pr
                             if norm.lower() in ['l1', 'l2']: 
                                 batch_valid_adv_samples_i = att.perturb(batch_data[valid_batch_targets],
                                                                 batch_targets_i[valid_batch_targets], best_loss=True)[0].detach()
-                                                                    #targeted=True).detach()
                             else:
-                                #print('batch size', len(batch_data[valid_batch_targets]), len(batch_targets_i[valid_batch_targets]))
-                                #if len(device_ids) > 1:
-                                #    att.device_ids = device_ids
-                                #    att.model.module.T = torch.tensor([att.model.module.T], device=device).repeat((batch_data[valid_batch_targets].shape[0], 1))
-                                #else:
-                                #    att.device_ids = device_ids
-                                att.model.T = torch.tensor([att.model.T], device=device).repeat((batch_data[valid_batch_targets].shape[0], 1))
+
                                 batch_valid_adv_samples_i = att.perturb(batch_data[valid_batch_targets],
                                                                 batch_targets_i[valid_batch_targets], targeted=True).detach()
 
-                                print('setting temperature back to', temperature)
-                                att.model.T = temperature
                             batch_adv_samples_i[valid_batch_targets] = batch_valid_adv_samples_i
-                            #model.module.T = 0.7155761122703552
-                            #att.model.module.T = 0.7155761122703552
                             batch_model_out_i = model(batch_adv_samples_i)
                             batch_probs_i = torch.softmax(batch_model_out_i, dim=1)
                             if verbose:

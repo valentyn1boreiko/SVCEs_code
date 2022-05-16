@@ -3,7 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 
-from .utils import logits_diff_loss, conf_diff_loss, confidence_loss, reduce
+from .utils import logits_diff_loss, conf_diff_loss, confidence_loss, reduce, log_confidence_loss
+
 
 class AdversarialAttack():
     def __init__(self, loss, num_classes, model=None, save_trajectory=False):
@@ -57,6 +58,11 @@ class AdversarialAttack():
                     l_f = lambda data, data_out: confidence_loss(data_out, y, reduction=reduction)
                 else:
                     l_f = lambda data, data_out: -confidence_loss(data_out, y, reduction=reduction)
+            elif self.loss.lower() == 'log_conf':
+                if not targeted:
+                    l_f = lambda data, data_out: log_confidence_loss(data_out, y, reduction=reduction)
+                else:
+                    l_f = lambda data, data_out: -log_confidence_loss(data_out, y, reduction=reduction)
             elif self.loss.lower() == 'confdiff':
                 if not targeted:
                     y_oh = F.one_hot(y, self.num_classes)
