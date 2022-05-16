@@ -1,6 +1,18 @@
 # **Sparse Visual Counterfactual Explanations in Image Space**
 
 Welcome to the codebase for our paper *Sparse Visual Counterfactual Explanations in Image Space.* We will guide you through the process of generating your own l1.5 visual counterfactual explanations on ImageNet with the multiple norm robust model Madry + FT. 
+## Examples of l1.5 VCEs for ImageNet
+
+<p align="center">
+  <img src="images_examples/edible fruit_orange_0_47545.png" />
+</p>
+<p align="center">
+  <img src="images_examples/finch_junco_0_680.png" />
+</p>
+<p align="center">
+  <img src="images_examples/geological formation formation_alp_0_48544.png" />
+</p>
+
 ## Setup
 
 Before we can start with the generation, we have to setup the project and install required packages.
